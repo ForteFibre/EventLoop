@@ -61,6 +61,7 @@ void Loop::run();
 ### `Loop::set_interval`
 
 ```cpp
+template<typename Func>
 Loop::TimerTask::Ptr Loop::set_interval(Func &&func, uint64_t timeout);
 ```
 
@@ -69,6 +70,7 @@ Loop::TimerTask::Ptr Loop::set_interval(Func &&func, uint64_t timeout);
 ### `Loop::set_timeout`
 
 ```cpp
+template<typename Func>
 Loop::TimerTask::Ptr Loop::set_timeout(Func &&func, uint64_t timeout)
 ```
 
@@ -85,6 +87,7 @@ class Loop::TimerTask;
 ### `Loop::TimerTask::create`
 
 ```cpp
+template<typename Func>
 static Loop::TimerTask::Ptr Loop::TimerTask::create(Func &&func);
 ```
 
