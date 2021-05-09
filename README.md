@@ -36,6 +36,20 @@ int main() {
 
 ## 基本的な使い方
 
+EventLoopを使うには `fortefibre` 名前空間の下に現在時刻をミリ秒で返す `timeout` 関数を定義しなければなりません．`<chrono>` ヘッダが利用可能な環境では以下のように定義されることでしょう．
+
+```cpp
+namespace fortefibre {
+
+uint64_t timestamp() {
+    using namespace chrono;
+    auto now = system_clock::now().time_since_epoch();
+    return (uint64_t) duration_cast<milliseconds>(now).count();
+}
+
+} // namespace fortefibre
+```
+
 ### `Loop::run`
 
 ```cpp
