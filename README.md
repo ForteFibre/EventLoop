@@ -36,33 +36,61 @@ int main() {
 
 ## 基本的な使い方
 
-### `Loop::run()`
+### `Loop::run`
+
+```cpp
+void Loop::run();
+```
 
 イベントループを実行します．現状，この関数から処理が返ってくることはありません．
 
-### `Loop::TimerTask::Ptr Loop::set_interval(Func &&func, uint64_t timeout)`
+### `Loop::set_interval`
+
+```cpp
+Loop::TimerTask::Ptr Loop::set_interval(Func &&func, uint64_t timeout);
+```
 
 `timeout` ミリ秒ごとに `func` を実行します．
 
-### `Loop::TimerTask::Ptr Loop::set_timeout(Func &&func, uint64_t timeout)`
+### `Loop::set_timeout`
+
+```cpp
+Loop::TimerTask::Ptr Loop::set_timeout(Func &&func, uint64_t timeout)
+```
 
 `timeout` ミリ秒後に一回だけ `func` を実行します．
 
 ### `Loop::TimerTask`
 
+```cpp
+class Loop::TimerTask;
+```
+
 時間に関係するタスクです．`Loop::TimerTask::Ptr` は `Loop::TimerTask` のスマートポインタです．
 
-#### `static Loop::TimerTask::Ptr create(Func &&func)`
+### `Loop::TimerTask::create`
+
+```cpp
+static Loop::TimerTask::Ptr Loop::TimerTask::create(Func &&func);
+```
 
 `TimerTask` を作成するファクトリ関数です．作成された時点では `TimerTask` はイベントループの実行対象に含まれていません．作成された `TimerTask` をイベントループの実行対象に含まれるようにするには `start` を呼ばなければなりません．
 
-#### `void start(uint64_t timeout, uint64_t repeat = 0)`
+### `Loop::TimerTask::start`
+
+```cpp
+void Loop::TimerTask::start(uint64_t timeout, uint64_t repeat = 0);
+```
 
 `TimerTask` を動作させます．より具体的には，`TimerTask` をイベントループの実行対象に加えます．
 
 - `repeat` が0のとき，`timeout` ミリ秒後に一回だけ関数を実行するようイベントループにスケジュールされます．
 - `repeat` が1以上のとき，`timeout` ミリ秒後まで待機したのち，`repeat` ミリ秒ごとに関数を実行するようイベントループにスケジュールされます．
 
-#### `void stop()`
+### `Loop::TimerTask::stop`
+
+```cpp
+void Loop::TimerTask::stop();
+```
 
 `TimerTask` を停止させます．より具体的には，`TimerTask` をイベントループの実行対象から外します．
