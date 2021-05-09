@@ -65,7 +65,7 @@ template<typename Func>
 Loop::TimerTask::Ptr Loop::set_interval(Func &&func, uint64_t timeout);
 ```
 
-`timeout` ミリ秒ごとに `func` を実行します．
+`timeout` ミリ秒ごとに `func` を実行されるように `TimerTask` をイベントループの実行対象に加えます．
 
 ### `Loop::set_timeout`
 
@@ -74,7 +74,7 @@ template<typename Func>
 Loop::TimerTask::Ptr Loop::set_timeout(Func &&func, uint64_t timeout)
 ```
 
-`timeout` ミリ秒後に一回だけ `func` を実行します．
+`timeout` ミリ秒後に一回だけ `func` を実行されるように `TimerTask` をイベントループの実行対象に加えます．
 
 ### `Loop::TimerTask`
 
