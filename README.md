@@ -50,6 +50,18 @@ uint64_t timestamp() {
 } // namespace fortefibre
 ```
 
+あるいは，例えば[stm32plus](https://github.com/andysworkshop/stm32plus)をお使いなら次のような定義になることでしょう．
+
+```cpp
+namespace fortefibre {
+
+uint64_t timestamp() {
+    return stm32plus::MillisecondTimer::millis();
+}
+
+}
+```
+
 ### `Loop::run`
 
 ```cpp
