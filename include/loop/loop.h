@@ -101,7 +101,7 @@ public:
         void set_repeat(uint64_t repeat) noexcept
         { _repeat = repeat; }
 
-        bool exceeded() const noexcept
+        bool expired() const noexcept
         { return _timeout < _loop->_timestamp; }
 
         void run() noexcept
@@ -122,7 +122,7 @@ public:
         if (_timer_tasks.empty()) return;
 
         auto task = *_timer_tasks.begin();
-        if (!task->exceeded()) return;
+        if (!task->expired()) return;
 
         task->stop();
         task->again();
