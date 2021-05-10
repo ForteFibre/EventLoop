@@ -12,7 +12,7 @@ uint64_t timestamp();
 
 template<typename T>
 class NonCopyable {
-    NonCopyable() { }
+    NonCopyable() noexcept { }
 
     friend T;
 
@@ -32,18 +32,18 @@ public:
     using Ptr = std::shared_ptr<Runnable>;
 
     template<typename F>
-    static Ptr create(F &&func)
+    static Ptr create(F &&func) noexcept
     { return std::make_shared<Impl<F>>(std::forward<F>(func)); }
 };
 
 template<typename Func>
-class Runnable::Impl : public Runnable {
+class Runnable::Impl final : public Runnable {
     Func _func;
 
 public:
-    Impl(Func func): _func(func) { }
+    Impl(Func func) noexcept : _func(func) { }
 
-    void run() override
+    void run() noexcept override
     { _func(); }
 };
 
@@ -57,7 +57,7 @@ public:
         uint64_t _repeat = 0;
 
         template<typename Func>
-        TimerTask(Func &&func, Loop *loop)
+        TimerTask(Func &&func, Loop *loop) noexcept
             : _runnable(Runnable::create(std::forward<Func>(func)))
             , _loop(loop) { }
 
@@ -65,12 +65,12 @@ public:
         using Ptr = std::shared_ptr<TimerTask>;
 
         struct PtrOrd {
-            bool operator()(const TimerTask::Ptr a, const TimerTask::Ptr b) const
+            bool operator()(const TimerTask::Ptr a, const TimerTask::Ptr b) const noexcept
             { return a->_timeout != b->_timeout ? a->_timeout < b->_timeout : a->_id < b->_id; }
         };
 
         template<typename Func>
-        static Ptr create(Func &&func, Loop *loop = singleton())
+        static Ptr create(Func &&func, Loop *loop = singleton()) noexcept
         {
             struct TimerTaskHelper : TimerTask {
                 TimerTaskHelper(Func &&func, Loop *loop): TimerTask(std::forward<Func>(func), loop) { }
@@ -114,7 +114,7 @@ private:
     uint64_t _timestamp = 0;
 
 public:
-    void update_time()
+    void update_time() noexcept
     { _timestamp = timestamp(); }
 
     void run_timers() noexcept
@@ -153,7 +153,7 @@ public:
         }
     }
 
-    static Loop *singleton()
+    static Loop *singleton() noexcept
     {
         static Loop loop;
         return &loop;
