@@ -49,7 +49,7 @@ public:
 
 class Loop : NonCopyable<Loop> {
 public:
-    class TimerTask : public std::enable_shared_from_this<TimerTask>, NonCopyable<TimerTask> {
+    class Timer : public std::enable_shared_from_this<Timer>, NonCopyable<Timer> {
         Runnable::Ptr _runnable;
         Loop *_loop;
         uint64_t _id;
@@ -57,23 +57,23 @@ public:
         uint64_t _repeat = 0;
 
         template<typename Func>
-        TimerTask(Func &&func, Loop *loop) noexcept
+        Timer(Func &&func, Loop *loop) noexcept
             : _runnable(Runnable::create(std::forward<Func>(func)))
             , _loop(loop) { }
 
     public:
-        using Ptr = std::shared_ptr<TimerTask>;
+        using Ptr = std::shared_ptr<Timer>;
 
         struct PtrOrd {
-            bool operator()(const TimerTask::Ptr a, const TimerTask::Ptr b) const noexcept
+            bool operator()(const Timer::Ptr a, const Timer::Ptr b) const noexcept
             { return a->_timeout != b->_timeout ? a->_timeout < b->_timeout : a->_id < b->_id; }
         };
 
         template<typename Func>
         static Ptr create(Func &&func, Loop *loop = singleton()) noexcept
         {
-            struct TimerTaskHelper : TimerTask {
-                TimerTaskHelper(Func &&func, Loop *loop): TimerTask(std::forward<Func>(func), loop) { }
+            struct TimerTaskHelper : Timer {
+                TimerTaskHelper(Func &&func, Loop *loop): Timer(std::forward<Func>(func), loop) { }
             };
             return std::make_shared<TimerTaskHelper>(std::forward<Func>(func), loop);
         }
@@ -109,7 +109,7 @@ public:
     };
 
 private:
-    std::set<TimerTask::Ptr, TimerTask::PtrOrd> _timer_tasks;
+    std::set<Timer::Ptr, Timer::PtrOrd> _timer_tasks;
     uint64_t _timer_count = 0;
     uint64_t _timestamp = 0;
 
@@ -132,7 +132,7 @@ public:
     template<typename Func>
     static auto set_timeout(Func &&func, uint64_t timeout, Loop *loop = singleton()) noexcept
     {
-        auto res = TimerTask::create(std::forward<Func>(func), loop);
+        auto res = Timer::create(std::forward<Func>(func), loop);
         res->start(timeout);
         return res;
     }
@@ -140,7 +140,7 @@ public:
     template<typename Func>
     static auto set_interval(Func &&func, uint64_t timeout, Loop *loop = singleton()) noexcept
     {
-        auto res = TimerTask::create(std::forward<Func>(func), loop);
+        auto res = Timer::create(std::forward<Func>(func), loop);
         res->start(timeout, timeout);
         return res;
     }

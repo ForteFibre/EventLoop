@@ -74,52 +74,52 @@ void Loop::run();
 
 ```cpp
 template<typename Func>
-Loop::TimerTask::Ptr Loop::set_interval(Func &&func, uint64_t timeout);
+Loop::Timer::Ptr Loop::set_interval(Func &&func, uint64_t timeout);
 ```
 
-`timeout` ミリ秒ごとに `func` を実行されるように `TimerTask` をイベントループの実行対象に加えます．
+`timeout` ミリ秒ごとに `func` を実行されるように `Timer` をイベントループの実行対象に加えます．
 
 ### `Loop::set_timeout`
 
 ```cpp
 template<typename Func>
-Loop::TimerTask::Ptr Loop::set_timeout(Func &&func, uint64_t timeout)
+Loop::Timer::Ptr Loop::set_timeout(Func &&func, uint64_t timeout)
 ```
 
-`timeout` ミリ秒後に一回だけ `func` を実行されるように `TimerTask` をイベントループの実行対象に加えます．
+`timeout` ミリ秒後に一回だけ `func` を実行されるように `Timer` をイベントループの実行対象に加えます．
 
-### `Loop::TimerTask`
+### `Loop::Timer`
 
 ```cpp
-class Loop::TimerTask;
+class Loop::Timer;
 ```
 
-時間に関係するタスクです．`Loop::TimerTask::Ptr` は `Loop::TimerTask` のスマートポインタです．
+時間に関係するタスクです．`Loop::Timer::Ptr` は `Loop::Timer` のスマートポインタです．
 
-### `Loop::TimerTask::create`
+### `Loop::Timer::create`
 
 ```cpp
 template<typename Func>
-static Loop::TimerTask::Ptr Loop::TimerTask::create(Func &&func);
+static Loop::Timer::Ptr Loop::Timer::create(Func &&func);
 ```
 
-`TimerTask` を作成するファクトリ関数です．作成された時点では `TimerTask` はイベントループの実行対象に含まれていません．作成された `TimerTask` をイベントループの実行対象に含まれるようにするには `start` を呼ばなければなりません．
+`Timer` を作成するファクトリ関数です．作成された時点では `Timer` はイベントループの実行対象に含まれていません．作成された `Timer` をイベントループの実行対象に含まれるようにするには `start` を呼ばなければなりません．
 
-### `Loop::TimerTask::start`
+### `Loop::Timer::start`
 
 ```cpp
-void Loop::TimerTask::start(uint64_t timeout, uint64_t repeat = 0);
+void Loop::Timer::start(uint64_t timeout, uint64_t repeat = 0);
 ```
 
-`TimerTask` を動作させます．より具体的には，`TimerTask` をイベントループの実行対象に加えます．
+`Timer` を動作させます．より具体的には，`Timer` をイベントループの実行対象に加えます．
 
 - `repeat` が0のとき，`timeout` ミリ秒後に一回だけ関数を実行するようイベントループにスケジュールされます．
 - `repeat` が1以上のとき，`timeout` ミリ秒後まで待機したのち，`repeat` ミリ秒ごとに関数を実行するようイベントループにスケジュールされます．
 
-### `Loop::TimerTask::stop`
+### `Loop::Timer::stop`
 
 ```cpp
-void Loop::TimerTask::stop();
+void Loop::Timer::stop();
 ```
 
-`TimerTask` を停止させます．より具体的には，`TimerTask` をイベントループの実行対象から外します．
+`Timer` を停止させます．より具体的には，`Timer` をイベントループの実行対象から外します．
