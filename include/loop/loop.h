@@ -72,10 +72,10 @@ public:
         template<typename Func>
         static Ptr create(Func &&func, Loop *loop = singleton()) noexcept
         {
-            struct TimerTaskHelper : Timer {
-                TimerTaskHelper(Func &&func, Loop *loop): Timer(std::forward<Func>(func), loop) { }
+            struct TimerHelper : Timer {
+                TimerHelper(Func &&func, Loop *loop): Timer(std::forward<Func>(func), loop) { }
             };
-            return std::make_shared<TimerTaskHelper>(std::forward<Func>(func), loop);
+            return std::make_shared<TimerHelper>(std::forward<Func>(func), loop);
         }
 
         void start(uint64_t timeout, uint64_t repeat = 0) noexcept
