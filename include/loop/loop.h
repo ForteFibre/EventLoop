@@ -102,7 +102,7 @@ public:
         { _repeat = repeat; }
 
         bool expired() const noexcept
-        { return _timeout < _loop->_timestamp; }
+        { return _timeout <= _loop->_timestamp; }
 
         void run() noexcept
         { _runnable->run(); }
